@@ -1,0 +1,47 @@
+.container {
+  margin: 0 auto;
+  margin-top: 20px;
+  min-width: 400px;
+  width: 60%;
+}
+
+.editor {
+  align-items: flex-start;
+  background-color: #2b303b;
+  display: flex;
+  height: 462px;
+  overflow: auto;
+  overflow-y: scroll;
+  width: 800px;
+}
+
+.editor-input {
+  color: #c0c5ce;
+  flex: 1;
+}
+
+.editor-input::selection {
+  background: #bac4cd;
+  color: #c0c5ce;
+}
+
+.editor-lines {
+  color: #757a84;
+  flex: none;
+  text-align: right;
+  width: 40px;
+}
+
+.editor-input,
+.editor-lines {
+  background-color: #2b303b;
+  display: inline-block;
+  font: normal 15px/1.5 "Input Mono", monospace;
+  overflow: hidden;
+  padding: 4px;
+}
+
+.editor-input:focus,
+.editor-lines:focus {
+  outline: 0;
+}
