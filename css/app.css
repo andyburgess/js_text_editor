@@ -39,9 +39,15 @@
   font: normal 15px/1.5 "Input Mono", monospace;
   overflow: hidden;
   padding: 4px;
+  white-space: pre;
 }
 
 .editor-input:focus,
 .editor-lines:focus {
   outline: 0;
+}
+
+.keyword {
+  color: red;
+  background-color: yellow;
 }

@@ -1,21 +1,52 @@
-$( document ).ready( function() {
+jQuery( document ).ready(function() {
 
-  var Editor = (function() {
+  var Editor = (function( $ ) {
 
-    var self = $( ".editor" );
-    var input = $( ".editor-input" );
-    var lines = $( ".editor-lines" );
+    var input, lines, self, settings;
+
+    var defaults = {
+      input: {
+        class: "editor-input",
+        contenteditable: "true"
+      },
+      lines: {
+        class: "editor-lines"
+      }
+    };
 
     var directFocus = function() {
       input.focus();
     };
 
-    var bindEvents = function() {
-      self.on( "click", directFocus );
+    var inputChanged = function( e ) {
+      e.preventDefault();
+      input.append(String.fromCharCode(e.which));
     };
 
-    var init = function() {
-      input.attr( "contenteditable", "true" );
+    var insertNewLine = function() {
+      input.append("\n");
+    };
+
+    var bindEvents = function() {
+      self.on("click", directFocus);
+      input.on("keypress", inputChanged);
+    };
+
+    var init = function( options ) {
+      settings = $.extend( true, {}, defaults, options );
+
+      self = $( "#js-text-editor" );
+
+      if( !settings.lines.hidden ) {
+        lines = $( "<div />" )
+        .attr( settings.lines )
+        .appendTo( self );
+      }
+
+      input = $( "<div />" )
+      .attr( settings.input )
+      .appendTo( self );
+
       bindEvents();
     };
 
@@ -23,26 +54,10 @@ $( document ).ready( function() {
       init: init
     };
 
-  })();
+  })( jQuery );
 
 
   Editor.init();
 
 
 });
-
-//   editorInput.keypress(function( e ) {
-//     inputChanged(e);
-//   });
-//
-// function inputChanged(e) {
-//   if(e.which == 13) {
-//     e.preventDefault();
-
-//   }
-// }
-
-// function countLineBreaks(element) {
-//   var count = $( element ).html().split(/[\n\r]/g).length;
-//   return count;
-// }
