@@ -1,53 +1,88 @@
-.container {
+.js-text-editor {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: row;
+  height: 600px;
   margin: 0 auto;
   margin-top: 20px;
   min-width: 400px;
   width: 60%;
 }
 
-.editor {
-  align-items: flex-start;
-  background-color: #2b303b;
-  display: flex;
-  height: 462px;
-  overflow: auto;
-  overflow-y: scroll;
-  width: 800px;
+.input-container {
+  background-color: #373c46;
+  height: 100%;
+  order: 1;
+  width: 100%;
 }
 
-.editor-input {
+.input-header {
+  background-color: #676c74;
+  box-sizing: border-box;
+  height: 6%;
+  padding: 8px;
+  width: 100%;
+}
+
+.input-field {
+  background-color: inherit;
+  border: none;
+  box-sizing: border-box;
   color: #c0c5ce;
-  flex: 1;
+  font: normal 15px/1.5 "Input Mono", monospace;
+  height: 100%;
+  outline: none;
+  overflow-y: scroll;
+  padding: 12px 12px 12px 52px;
+  resize: none;
+  white-space: pre;
+  width: 100%;
 }
 
-.editor-input::selection {
+.input-field::selection {
   background: #bac4cd;
   color: #c0c5ce;
 }
 
-.editor-lines {
-  color: #757a84;
-  flex: none;
-  text-align: right;
-  width: 40px;
+.output-container {
+  background-color: #2b303b;
+  display: flex;
+  height: 100%;
+  order: 2;
+  overflow-y: scroll;
+  width: 100%;
 }
 
-.editor-input,
-.editor-lines {
-  background-color: #2b303b;
+.output-header {
+  background-color: #676c74;
+  box-sizing: border-box;
+  height: 6%;
+  padding: 8px;
+  width: 100%;
+}
+
+.output-field {
+  color: #c0c5ce;
+}
+
+.output-field::selection,
+.output-line-numbers::selection {
+  background: #bac4cd;
+  color: #c0c5ce;
+}
+
+.output-field,
+.output-line-numbers {
+  background-color: inherit;
   display: inline-block;
   font: normal 15px/1.5 "Input Mono", monospace;
-  overflow: hidden;
-  padding: 4px;
+  padding: 12px 4px 0;
+  vertical-align: top;
   white-space: pre;
 }
 
-.editor-input:focus,
-.editor-lines:focus {
-  outline: 0;
-}
-
-.keyword {
-  color: red;
-  background-color: yellow;
+.output-line-numbers {
+  color: #757a84;
+  text-align: right;
+  width: 40px;
 }
