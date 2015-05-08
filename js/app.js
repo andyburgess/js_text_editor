@@ -1,78 +1,88 @@
-jQuery( document ).ready(function() {
+jQuery(document).ready(function() {
 
-  editor = $( ".input-container" );
-  input = $( ".input-field" );
-  lines = $( ".output-line-numbers" );
-  output = $( ".output-field" );
+  var keywords = [
+    "await", "break", "case", "class", "catch", "const", "continue", "debugger",
+    "default", "delete", "do", "else", "enum", "export", "extends", "finally",
+    "for", "function", "if", "implements", "import", "in", "instanceof",
+    "interface", "let", "new", "package", "private", "protected",
+    "public", "return", "static", "super", "switch", "this",
+    "throw", "try", "typeof", "var", "void", "while",
+    "with", "yield"
+  ];
 
-  input.on("keyup", sendToViewer);
+  var literals = [
+    "null", "true", "false"
+  ];
 
-  function sendToViewer(e) {
+  var input = $(".input-field"),
+    output = $(".output-field"),
+    timeoutID;
+
+  input.on("keyup", processInput);
+  input.on("keydown", cancelTimer);
+
+  function processInput(e) {
+    cancelTimer();
+    timeoutID = setTimeout(formatInput, 100);
+  }
+
+  function cancelTimer(e) {
+    clearTimeout(timeoutID);
+  }
+
+  function formatInput(e) {
     var text = input.val();
-    output.text(text);
-    lines.text("");
-    var lineCount = output.text().split(/\n/g).length;
-    for(var i = 1; i < lineCount + 1; i++) {
-      lines.append(i + "\n");
-    }
-    // for(var i = 1; i < output.text().split(/\n/g).length + 3; i++) {
-    //   lines.append(i + "\n");
-    // }
+    var re = RegExp("\\b(" + keywords.join("|") + ")\\b", "gi");
+    text = text.replace(re, "<span class=\"keyword\">$&</span>");
+    output.html(text);
   }
 
 });
 
 
-// var Editor = (function( $ ) {
+// var Editor = (function($) {
 
-  //   var input, lines, self, settings;
+//     var self, settings;
 
-  //   var defaults = {
-  //     input: {
-  //       class: "editor-input",
-  //       contenteditable: "true"
-  //     },
-  //     lines: {
-  //       class: "editor-lines"
-  //     }
-  //   };
+//     var defaults = {
+//       self: {
+//         class: ".js-text-editor"
+//       }
+//     };
 
-  //   var directFocus = function() {
-  //     input.focus();
-  //   };
+//     var elms = [
+//       "editor-container",
+//         "editor-header",
+//         "editor-content",
+//           "input-container",
+//             "input-header",
+//             "input-content",
+//               "input-field",
+//           "output-container",
+//             "output-header",
+//             "output-content",
+//               "output-gutter",
+//               "output-field"
+//     ];
 
-  //   var inputChanged = function( e ) {
+//     var bindEvents = function() {
 
-  //   };
+//     };
 
-  //   var bindEvents = function() {
-  //     self.on("click", directFocus);
-  //     input.on("keypress", inputChanged);
-  //   };
+//     var init = function(options) {
+//       settings = $.extend(true, {}, defaults, options);
 
-  //   var init = function( options ) {
-  //     settings = $.extend( true, {}, defaults, options );
+//       self = $(settings.self.class);
+//       console.log(self);
 
-  //     self = $( "#js-text-editor" );
+//       bindEvents();
+//     };
 
-  //     if( !settings.lines.hidden ) {
-  //       lines = $( "<div />" )
-  //       .attr( settings.lines )
-  //       .appendTo( self );
-  //     }
+//     return {
+//       init: init
+//     };
 
-  //     input = $( "<div />" )
-  //     .attr( settings.input )
-  //     .appendTo( self );
-
-  //     bindEvents();
-  //   };
-
-  //   return {
-  //     init: init
-  //   };
-
-  // })( jQuery );
+//   })(jQuery);
 
 
-  // Editor.init();
+//   Editor.init();

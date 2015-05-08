@@ -1,33 +1,62 @@
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body {
+  background-color: #c0c5ce;
+}
+
 .js-text-editor {
   align-items: flex-start;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   height: 600px;
   margin: 0 auto;
-  margin-top: 20px;
+  margin-top: 50px;
   min-width: 400px;
-  width: 60%;
+  width: 70%;
+}
+
+.editor-header {
+  order: 1;
+}
+
+.editor-content {
+  align-items: stretch;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: row;
+  height: 100%;
+  order: 2;
+  width: 100%;
 }
 
 .input-container {
-  background-color: #373c46;
+  align-items: flex-start;
+  background-color: #2b303b;
+  display: flex;
+  flex-direction: column;
   height: 100%;
   order: 1;
   width: 100%;
 }
 
-.input-header {
-  background-color: #676c74;
-  box-sizing: border-box;
-  height: 6%;
-  padding: 8px;
+.input-content {
+  background-color: #2b303b;
+  height: 94%;
+  order: 2;
   width: 100%;
 }
 
 .input-field {
   background-color: inherit;
   border: none;
-  box-sizing: border-box;
   color: #c0c5ce;
   font: normal 15px/1.5 "Input Mono", monospace;
   height: 100%;
@@ -44,35 +73,49 @@
   color: #c0c5ce;
 }
 
+.input-header,
+.output-header {
+  background-color: #232830;
+  color: #676c74;
+  font: normal 14px/1 sans-serif;
+  height: 6%;
+  order: 1;
+  overflow: hidden;
+  padding: 10px;
+  width: 100%;
+}
+
 .output-container {
+  align-items: flex-start;
   background-color: #2b303b;
   display: flex;
+  flex-direction: column;
   height: 100%;
+  order: 2;
+  width: 100%;
+}
+
+.output-content {
+  background-color: inherit;
+  height: 94%;
   order: 2;
   overflow-y: scroll;
   width: 100%;
 }
 
-.output-header {
-  background-color: #676c74;
-  box-sizing: border-box;
-  height: 6%;
-  padding: 8px;
-  width: 100%;
+.output-content::selection,
+.output-field::selection,
+.output-gutter::selection {
+  background: #bac4cd;
+  color: #c0c5ce;
 }
 
 .output-field {
   color: #c0c5ce;
 }
 
-.output-field::selection,
-.output-line-numbers::selection {
-  background: #bac4cd;
-  color: #c0c5ce;
-}
-
 .output-field,
-.output-line-numbers {
+.output-gutter {
   background-color: inherit;
   display: inline-block;
   font: normal 15px/1.5 "Input Mono", monospace;
@@ -81,8 +124,13 @@
   white-space: pre;
 }
 
-.output-line-numbers {
+.output-gutter {
   color: #757a84;
+  order: 1;
   text-align: right;
   width: 40px;
+}
+
+.keyword {
+  color: yellow;
 }
