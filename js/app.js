@@ -32,12 +32,59 @@ jQuery(document).ready(function() {
 
   function formatInput(e) {
     var text = input.val();
-    var re = RegExp("\\b(" + keywords.join("|") + ")\\b", "gi");
-    text = text.replace(re, "<span class=\"keyword\">$&</span>");
-    output.html(text);
+
+    var textSplit = text.split(/\n/g);
+
+    console.log(textSplit.join("|"));
+
+    function keywordReplace(match, p1, p2, p3) {
+      return p1 + "<span class=\"keyword\">" + p2 + "</span>" + p3;
+    }
+
+    function methodReplace(match, p1, p2, p3) {
+      return p1 + "<span class=\"method\">" + p2 + "</span>" + p3;
+    }
+
+    output.html("");
+
+    textSplit.forEach(function(item, index) {
+      var reKeyword = RegExp("(^|\\s)(" + keywords.join("|") + ")((?!\\S)|\\()", "g");
+      item = item.replace(reKeyword, keywordReplace);
+
+      var reMethod = /(\.)([a-zA-Z]+)(\()/g;
+      item = item.replace(reMethod, methodReplace);
+
+      var line = $("<div />")
+        .attr("class", "output-line")
+        .html(item);
+      line.on("mouseover", highlightActiveLine);
+      line.on("mouseout", unhighlightActiveLine);
+      output.append(line);
+    });
+
+  }
+
+  function highlightActiveLine(e) {
+    $(e.currentTarget).addClass("active");
+  }
+
+  function unhighlightActiveLine(e) {
+    $(e.currentTarget).removeClass("active");
   }
 
 });
+
+// strings - (["'])(?:(?=(\\?))\2.)*?\1
+
+// var floats = /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?/g;
+
+// // matches .log(
+// var reMethod = /\.[a-zA-Z]+\(/g;
+// text.replace(reMethod, methodReplacer("$&"));
+
+// function methodReplacer(text) {
+//   var methodName = text.replace(/[\.\(]/, "");
+// }
 
 
 // var Editor = (function($) {

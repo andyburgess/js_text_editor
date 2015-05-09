@@ -15,25 +15,29 @@ body {
 .js-text-editor {
   align-items: flex-start;
   display: flex;
-  flex-direction: column;
+  flex-flow: column nowrap;
   height: 600px;
   margin: 0 auto;
-  margin-top: 50px;
+  margin-top: 30px;
   min-width: 400px;
-  width: 70%;
+  width: 90%;
 }
 
 .editor-header {
+  flex: 1 1 auto;
+  height: 10%;
   order: 1;
+  width: 100%;
 }
 
 .editor-content {
   align-items: stretch;
   display: flex;
   flex: 1 1 auto;
-  flex-direction: row;
-  height: 100%;
+  flex-flow: row wrap;
+  height: 90%;
   order: 2;
+  min-width: 400px;
   width: 100%;
 }
 
@@ -41,10 +45,11 @@ body {
   align-items: flex-start;
   background-color: #2b303b;
   display: flex;
-  flex-direction: column;
+  flex: 1 1 auto;
+  flex-flow: column nowrap;
   height: 100%;
   order: 1;
-  width: 100%;
+  min-width: 50%;
 }
 
 .input-content {
@@ -68,11 +73,6 @@ body {
   width: 100%;
 }
 
-.input-field::selection {
-  background: #bac4cd;
-  color: #c0c5ce;
-}
-
 .input-header,
 .output-header {
   background-color: #232830;
@@ -89,29 +89,33 @@ body {
   align-items: flex-start;
   background-color: #2b303b;
   display: flex;
-  flex-direction: column;
+  flex: 1 1 auto;
+  flex-flow: column nowrap;
   height: 100%;
   order: 2;
-  width: 100%;
+  min-width: 50%;
 }
 
 .output-content {
+  align-items: stretch;
   background-color: inherit;
+  display: flex;
+  flex-flow: row nowrap;
   height: 94%;
   order: 2;
   overflow-y: scroll;
   width: 100%;
 }
 
-.output-content::selection,
-.output-field::selection,
-.output-gutter::selection {
+::selection {
   background: #bac4cd;
   color: #c0c5ce;
 }
 
 .output-field {
   color: #c0c5ce;
+  flex: 1 1 auto;
+  order: 2;
 }
 
 .output-field,
@@ -126,11 +130,28 @@ body {
 
 .output-gutter {
   color: #757a84;
+  flex: none;
   order: 1;
   text-align: right;
   width: 40px;
 }
 
-.keyword {
-  color: yellow;
+.output-line {}
+
+.active {
+  background-color: #272b34;
 }
+
+.keyword {
+  color: #26a6a6;
+}
+
+.method {
+  color: #ff5d38;
+}
+
+.function-name {
+  color: #60a12a;
+}
+
+.string {}
