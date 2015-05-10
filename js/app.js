@@ -1,21 +1,51 @@
 jQuery(document).ready(function() {
 
   var keywords = [
-    "await", "break", "case", "class", "catch", "const", "continue", "debugger",
-    "default", "delete", "do", "else", "enum", "export", "extends", "finally",
-    "for", "function", "if", "implements", "import", "in", "instanceof",
-    "interface", "let", "new", "package", "private", "protected",
-    "public", "return", "static", "super", "switch", "this",
-    "throw", "try", "typeof", "var", "void", "while",
-    "with", "yield"
+    "abstract", "await", "boolean", "break", "byte", "case", "catch", "char",
+    "class", "const", "continue", "debugger", "default", "delete", "do",
+    "double", "else", "enum", "export", "extends", "final", "finally",
+    "float", "for", "function", "goto", "if", "implements", "import",
+    "in", "instanceof", "int", "interface", "let", "long", "native",
+    "new", "package", "private", "protected", "public", "return",
+    "short", "static", "super", "switch", "synchronized", "this",
+    "throw", "transient", "try", "typeof", "var", "void",
+    "volatile", "while", "with", "yield"
   ];
 
   var literals = [
     "null", "true", "false"
   ];
 
+  var dictionary = {
+    entry: {
+      language: "javascript",
+      rules: [{
+        key: "strings",
+        val: RegExp(/((?:["'])(?:(?=(?:\\?))(?:\\?).)*?(?:["']))/g)
+      }, {
+        key: "keywords",
+        val: RegExp("((?:\\b)(?:" + keywords.join("|") + ")(?=(?:\\b)))", "g")
+      }, {
+        key: "literals",
+        val: RegExp("((?:\\b)(?:" + literals.join("|") + ")(?=(?:\\b)))", "g")
+      }, {
+        key: "methods",
+        val: RegExp(/((?:\.)(?:[\w]+)(?:\())/g)
+      }, {
+        key: "whitespace",
+        val: RegExp(/([\s])/g)
+      }]
+    },
+  };
+
+  var test = RegExp(dictionary.entry.rules.map(function(elem) {
+    return elem.val.source;
+  }).join("|"), "g");
+
+  console.log(test);
+
   var input = $(".input-field"),
-    output = $(".output-field"),
+    output = document.querySelector(".output-field"),
     timeoutID;
 
   input.on("keyup", processInput);
@@ -33,9 +63,9 @@ jQuery(document).ready(function() {
   function formatInput(e) {
     var text = input.val();
 
-    var textSplit = text.split(/\n/g);
+    var drawSpaces = true;
 
-    console.log(textSplit.join("|"));
+    var textSplit = text.split(/\r?\n/g);
 
     function keywordReplace(match, p1, p2, p3) {
       return p1 + "<span class=\"keyword\">" + p2 + "</span>" + p3;
@@ -45,21 +75,109 @@ jQuery(document).ready(function() {
       return p1 + "<span class=\"method\">" + p2 + "</span>" + p3;
     }
 
-    output.html("");
+    function testReplace(match, p1, p2, p3, p4, p5) {
+      //console.log("m: " + match + " p1: " + p1 + " p2: " + p2 + " p3: " + p3 + " p4: " + p4 + " p5: " + p5);
+      if (p1) {
+        console.log("m: " + match + ", type: string");
+      } else if (p2) {
+        console.log("m: " + match + ", type: keyword");
+      } else if (p3) {
+        console.log("m: " + match + ", type: literal");
+      } else if (p4) {
+        console.log("m: " + match + ", type: method");
+      } else if (p5) {
+        console.log("m: " + match + ", type: whitespace");
+      }
+    }
+
+    output.innerHTML = "";
 
     textSplit.forEach(function(item, index) {
-      var reKeyword = RegExp("(^|\\s)(" + keywords.join("|") + ")((?!\\S)|\\()", "g");
-      item = item.replace(reKeyword, keywordReplace);
 
-      var reMethod = /(\.)([a-zA-Z]+)(\()/g;
-      item = item.replace(reMethod, methodReplace);
+      var lineArray = [];
 
-      var line = $("<div />")
-        .attr("class", "output-line")
-        .html(item);
-      line.on("mouseover", highlightActiveLine);
-      line.on("mouseout", unhighlightActiveLine);
-      output.append(line);
+      var itemSplit = item.split(/(\s|\b)/g);
+
+      var reKeyword = RegExp("(\\b)(" + keywords.join("|") + ")(?=\\b)", "g"),
+        reLiteral = RegExp("(\\b)(" + literals.join("|") + ")(?=\\b)", "g"),
+        // String method from http://stackoverflow.com/a/171499
+        reString = RegExp(/(["'])(?:(?=(\\?))\2.)*?\1/g),
+        reMethod = RegExp(/(\.)([\w]+)(\()/g);
+
+      var line = document.createElement("div");
+      line.setAttribute("class", "output-line");
+
+      if (item) {
+        var matches;
+        while ((matches = test.exec(item))) {
+          var matchy = matches.input.substring(matches.index, test.lastIndex);
+          console.log("m: " + matchy + " i: " + matches.index + " li: " + test.lastIndex);
+        }
+
+        // itemSplit.forEach(function(innerItem, index) {
+        //   if (innerItem) {
+        //     if (innerItem.match(test)) {
+        //       innerItem.replace(test, testReplace);
+        //     }
+        //   }
+        // });
+
+
+        //   itemSplit.forEach(function(innerItem, index) {
+        //     if (innerItem) {
+        //       var spanElement = document.createElement("span");
+        //       var textElement = document.createTextNode(innerItem);
+
+        //       spanElement.appendChild(textElement);
+
+        //       if (innerItem.match(reKeyword)) {
+        //         if (itemSplit[index - 1] !== "\"") {
+        //           spanElement.setAttribute("class", "keyword");
+        //         }
+        //       }
+        //       if (innerItem.match(reMethod)) {
+        //         spanElement.setAttribute("class", "method");
+        //       }
+        //       if (innerItem.match(/\s/g) && drawSpaces === true) {
+        //         spanElement.setAttribute("class", "space");
+        //         spanElement.innerHTML = "&bull;";
+        //       }
+        //       line.appendChild(spanElement);
+        //     }
+        //   });
+      } else {
+        line.innerHTML = " ";
+      }
+
+
+      //item = item.replace(/( )/g, "<span class=\"space\">&bull;</span>");
+
+      // var line = document.createElement("div");
+      // line.setAttribute("class", "output-line");
+
+      // if (item) {
+      //   var reKeyword = RegExp("(\\b)(" + keywords.join("|") + ")((?=\\b)(?!\\\"))", "g");
+      //   item = item.replace(reKeyword, keywordReplace);
+
+      //   var reMethod = /(\.)([a-zA-Z]+)(\()/g;
+      //   item = item.replace(reMethod, methodReplace);
+
+      //   line.innerHTML = item;
+      // } else {
+      //   line.innerHTML = " ";
+      // }
+
+      // line.addEventListener("mouseover", highlightActiveLine);
+      // line.addEventListener("mouseout", unhighlightActiveLine);
+
+      output.appendChild(line);
+
+      // var line = $("<div />")
+      //   .attr("class", "output-line")
+      //   .html(item);
+      // line.on("mouseover", highlightActiveLine);
+      // line.on("mouseout", unhighlightActiveLine);
+      // output.append(line);
     });
 
   }
