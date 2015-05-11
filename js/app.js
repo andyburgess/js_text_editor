@@ -1,71 +1,29 @@
 jQuery(document).ready(function() {
 
-  var keywords = [
-    "abstract", "await", "boolean", "break", "byte", "case", "catch", "char",
-    "class", "const", "continue", "debugger", "default", "delete", "do",
-    "double", "else", "enum", "export", "extends", "final", "finally",
-    "float", "for", "function", "goto", "if", "implements", "import",
-    "in", "instanceof", "int", "interface", "let", "long", "native",
-    "new", "package", "private", "protected", "public", "return",
-    "short", "static", "super", "switch", "synchronized", "this",
-    "throw", "transient", "try", "typeof", "var", "void",
-    "volatile", "while", "with", "yield"
-  ];
-
-  var literals = [
-    "null", "true", "false"
-  ];
-
-  var operators = [
-    "\\+", "\\-", "\\*", "\\/", "\\%", "\\>", "\\<", "\\!", "\\&", "\\|", "\\^",
-    "\\~", "\\=", "\\\?\\s[a-zA-Z0-9]+\\s\\\:"
-  ];
-
   var dictionary = {
     entry: {
       language: "javascript",
       rules: [{
-        name: "strings",
-        pattern: RegExp(/((?:["'])(?:(?=(?:\\?))(?:\\?).)*?(?:["']))/g),
-        replacement: function(match) {
-          return ("<span class=\"string\">" + match + "</span>");
-        }
+        name: "js-string",
+        pattern: RegExp(/((?:["'])(?:(?=(?:\\?))(?:\\?).)*?(?:["']))/g)
       }, {
-        name: "keywords",
-        pattern: RegExp("((?:\\b)(?:" + keywords.join("|") + ")(?=(?:\\b)))", "g"),
-        replacement: function(match) {
-          return ("<span class=\"keyword\">" + match + "</span>");
-        }
+        name: "js-keyword",
+        pattern: RegExp(/((?:\b)(?:abstract|await|boolean|break|byte|case|catch|char|class|const|continue|debugger|default|delete|do|double|else|enum|export|extends|final|finally|float|for|function|goto|if|implements|import|in|instanceof|int|interface|let|long|native|new|package|private|protected|public|return|short|static|super|switch|synchronized|this|throw|transient|try|typeof|var|void|volatile|while|with|yield)(?=(?:\b)))/g)
       }, {
-        name: "methods",
-        pattern: RegExp(/((?:\.)(?:[\w]+)(?:\())/g),
-        replacement: function(match) {
-          return ("<span class=\"method\">" + match + "</span>");
-        }
+        name: "js-operator",
+        pattern: RegExp(/((?:\+|\-|\*|\/|\%|\>|<|\!|\&|\||\^|\~|\=))/g),
       }, {
-        name: "operators",
-        pattern: RegExp("((?:\\b)(?:" + operators.join("|") + ")(?=(?:\\b)))", "g"),
-        replacement: function(match) {
-          return ("<span class=\"operators\">" + match + "</span>");
-        }
+        name: "js-literal",
+        pattern: RegExp("((?:\\b)(?:null|true|false)(?=(?:\\b)))", "g")
       }, {
-        name: "literals",
-        pattern: RegExp("((?:\\b)(?:" + literals.join("|") + ")(?=(?:\\b)))", "g"),
-        replacement: function(match) {
-          return ("<span class=\"literal\">" + match + "</span>");
-        }
+        name: "js-number",
+        pattern: RegExp(/([-+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?)/g)
       }, {
-        name: "numbers",
-        pattern: RegExp(/([-+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?)/g),
-        replacement: function(match) {
-          return ("<span class=\"number\">" + match + "</span>");
-        }
+        name: "js-method",
+        pattern: RegExp(/((?:\.)(?:[\w]+)(?:\())/g)
       }, {
         name: "whitespace",
-        pattern: RegExp(/([\s])/g),
-        replacement: function(match) {
-          return ("<span class=\"space\">" + match + "</span>");
-        }
+        pattern: RegExp(/([\s])/g)
       }]
     },
   };
@@ -99,42 +57,35 @@ jQuery(document).ready(function() {
 
     var textSplit = text.split(/\r?\n/g);
 
+    function printmatches(matches) {
+      for (var i = 0; i < dictionary.entry.rules.length; i++) {
+        if (matches[i + 1] !== undefined) {
+          console.log("match: " + matches[i + 1] + " type: " + dictionary.entry.rules[i].name);
+        }
+      }
+    }
+
     output.innerHTML = "";
 
     textSplit.forEach(function(item, index) {
-
-      console.log("=============line start=================");
-
-      var lineArray = [];
-
-      var itemSplit = item.split(/(\s|\b)/g);
 
       var line = document.createElement("div");
       line.setAttribute("class", "output-line");
 
       if (item) {
-        var match = test.exec(item);
-        if (match !== null) {
-          for (var i = 0; i < dictionary.entry.rules.length; i++) {
-            if (match[i + 1] !== undefined) {
-              console.log("name: " + dictionary.entry.rules[i].name + " value: " + match[0] + " pos: " + match.index + " len: " + test.lastIndex);
-              //
-            }
-          }
+        console.log("=======newline=======");
+        var matches;
+        while ((matches = test.exec(item))) {
+          var match = matches.input.substring(matches.index, test.lastIndex);
+          //console.log("m: " + match + " start: " + matches.index + " end: " + test.lastIndex);
+          console.log(matches);
+          printmatches(matches);
         }
       } else {
         line.innerHTML = " ";
       }
 
       output.appendChild(line);
-
-      // var line = $("<div />")
-      //   .attr("class", "output-line")
-      //   .html(item);
-      // line.on("mouseover", highlightActiveLine);
-      // line.on("mouseout", unhighlightActiveLine);
-      // output.append(line);
-
     });
 
   }
@@ -149,6 +100,19 @@ jQuery(document).ready(function() {
 
 });
 
+// strings - (["'])(?:(?=(\\?))\2.)*?\1
+
+// var floats = /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?/g;
+
+// // matches .log(
+// var reMethod = /\.[a-zA-Z]+\(/g;
+// text.replace(reMethod, methodReplacer("$&"));
+
+// function methodReplacer(text) {
+//   var methodName = text.replace(/[\.\(]/, "");
+// }
+
+
 // var Editor = (function($) {
 
 //     var self, settings;
@@ -158,6 +122,21 @@ jQuery(document).ready(function() {
 //         class: ".js-text-editor"
 //       }
 //     };
+
+//     var elms = [
+//       "editor-container",
+//         "editor-header",
+//         "editor-content",
+//           "input-container",
+//             "input-header",
+//             "input-content",
+//               "input-field",
+//           "output-container",
+//             "output-header",
+//             "output-content",
+//               "output-gutter",
+//               "output-field"
+//     ];
 
 //     var bindEvents = function() {
 
