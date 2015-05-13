@@ -6,30 +6,38 @@
   <title>JS Text Editor</title>
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/app.css">
-  <link href="http://fonts.googleapis.com/css?family=Roboto:400,300,700,500" rel="stylesheet" type="text/css">
+  <link href="http://fonts.googleapis.com/css?family=Roboto:400,300,300italic,700,500" rel="stylesheet" type="text/css">
 </head>
 
 <body>
   <div class="js-text-editor">
     <div class="editor-header">
-      <h3>Sample Header</h3>
+      <h2>JS Text Editor</h2>
     </div>
     <div class="editor-content">
       <div class="input-container">
-        <div class="input-header">Raw input</div>
+        <div class="input-header">Raw Input</div>
         <div class="input-content">
           <textarea class="input-field" placeholder="Please input text..." spellcheck="false" wrap="off"></textarea>
         </div>
         <div class="input-footer"></div>
       </div>
       <div class="output-container">
-        <div class="output-header">Formatted output</div>
+        <div class="output-header">Formatted Output</div>
         <div class="output-content">
           <div class="output-gutter">1</div>
           <div class="output-field"></div>
         </div>
-        <div class="output-footer"></div>
+        <div class="output-footer">
+          <span class="output-info" id="exec-time">Executed in 0 milliseconds.</span>
+          <span class="output-info" id="token">No token selected.</span></div>
       </div>
+    </div>
+    <div class="editor-footer">
+      <div class="editor-info"><a href="#">William Burgess</a>&nbsp;&nbsp;|&nbsp;&nbsp;</div>
+      <div class="editor-info">CSCI E-3 Introduction to Web Programming Using Javascript&nbsp;&nbsp;|&nbsp;&nbsp;</div>
+      <div class="editor-info">Spring 2015&nbsp;&nbsp;|&nbsp;&nbsp;</div>
+      <div class="editor-info">Image credit: <a href="http://magdeleine.co/photo-folkert-gorter-n-223/">Folkert Gorter</a></div>
     </div>
   </div>
   <script src="js/app.js"></script>

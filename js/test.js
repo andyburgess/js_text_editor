@@ -3,27 +3,21 @@ window.onload = function() {
   var Lexer = (function() {
 
     var language,
-      ready,
       rules,
       regex;
 
-    var determineType = function(match) {
+    var setOptions = function(options) {
 
-      // For each capturing group in the RegExp object, determine
-      // which group was captured by the match, and return the
-      // rule's name based on the capturing group's index.
+      language = options.language;
+      rules = options.rules;
 
-      for (var i = 0; i < rules.length; i++) {
+      // The regex variable is a RegExp object that combines all
+      // of the individual patterns from the rules object as
+      // capturing groups within a single RegExp pattern.
 
-        // Since match[0] will always return the full match of the
-        // RegExp object's exec() function, the capturing group
-        // will be the first defined value after match[0].
-
-        if (match[i + 1] !== undefined) {
-          return rules[i].name;
-        }
-
-      }
+      regex = RegExp(rules.map(function(rule) {
+        return rule.pattern.source;
+      }).join("|"), "g");
 
     };
 
@@ -34,19 +28,34 @@ window.onload = function() {
         previousIndex = 0,
         unmatched = input;
 
-      // The regex variable is a RegExp object that combines all
-      // of the individual patterns from the rules object as
-      // capturing groups within a single RegExp pattern.
+      var determineLexeme = function(match) {
 
-      regex = RegExp(rules.map(function(rule) {
-        return rule.pattern.source;
-      }).join("|"), "g");
+        // For each capturing group in the RegExp object, determine
+        // which group was captured by the match, and return the
+        // rule's token and lexeme based on the matched group.
 
-      var pushLexeme = function(t, c) {
+        for (var i = 0; i < rules.length; i++) {
+
+          // Since match[0] will always return the full match of the
+          // RegExp object's exec() function, the capturing group
+          // will be the first defined value after match[0].
+
+          if (match[i + 1] !== undefined) {
+            return {
+              token: rules[i].token,
+              lexeme: match[0]
+            };
+          }
+
+        }
+
+      };
+
+      var pushUnknown = function(l) {
 
         lexemes.push({
-          type: t,
-          content: c
+          token: "unkown",
+          lexeme: l
         });
 
       };
@@ -58,80 +67,129 @@ window.onload = function() {
         // be stored in the lexemes array with type unknown.
 
         if (match.index != previousIndex) {
-          pushLexeme("unknown", input.substring(previousIndex, match.index));
+          pushUnknown(input.substring(previousIndex, match.index));
         }
 
-        pushLexeme(determineType(match), match[0]);
+        lexemes.push(determineLexeme(match));
         unmatched = input.substring(regex.lastIndex);
         previousIndex = regex.lastIndex;
 
       }
 
-      // Umatched content may still exist after the matches have
+      // Umatched lexemes may still exist after the matches have
       // been removed in the RegExp object's exec() function;
-      // this content is pushed to the lexemes array here.
+      // this lexeme is pushed to the lexemes array here.
 
       if (unmatched.length) {
-        pushLexeme("unknown", unmatched);
+        pushUnknown(unmatched);
       }
 
       return lexemes;
 
     };
 
-    var init = function(options) {
 
-      language = options.language;
-      rules = options.rules;
+    var init = function() {
 
-      if (ready) return;
+      var defaults = {
+        language: "javascript",
+        rules: [{
+          token: "comment",
+          pattern: RegExp(/((?:\/\/.*$))/g),
+        }, {
+          token: "string",
+          pattern: RegExp(/((?:["'])(?:(?=(?:\\?))(?:\\?).)*?(?:["']))/g),
+        }, {
+          token: "keyword",
+          pattern: RegExp(/((?:\b)(?:abstract|await|boolean|break|byte|case|catch|char|class|const|continue|debugger|default|delete|do|double|else|enum|export|extends|final|finally|float|for|function|goto|if|implements|import|in|instanceof|int|interface|let|long|native|new|package|private|protected|public|return|short|static|super|switch|synchronized|this|throw|transient|try|typeof|var|void|volatile|while|with|yield)(?=(?:\b)))/g),
+        }, {
+          token: "object",
+          pattern: RegExp(/((?:\b)(?:Array|Object|Function|Boolean|Symbol|Error|EvalError|InternalError|RangeError|ReferenceError|SyntaxError|TypeError|URIError|Number|Math|Date|String|RegExp)(?=(?:\b)))/g),
+        }, {
+          token: "object-value",
+          pattern: RegExp(/((?:\b)(?:Infinity|NaN|undefined)(?=(?:\b)))/g),
+        }, {
+          token: "object-function",
+          pattern: RegExp(/((?:\b)(?:eval|uneval|isFinite|isNaN|parseFloat|parseInt|decodeURI|decodeURIComponent|encodeURI|encodeURIComponent|escape|unescape)(?=(?:\()))/g),
+        }, {
+          token: "regex",
+          pattern: RegExp(/((?:\/.*\/g?i?m?))/g),
+        }, {
+          token: "operator",
+          pattern: RegExp(/((?:\=\=\=|\=\=|\=|\!\=\=|\!\=|\!|\~|\>\>\>\=|\>\>\>|\>\>\=|\>\>|\>\=|\>|<<\=|<<|<\=|<|\+\=|\+\+|\+|\-\=|\-\-|\-|\*\=|\*|\/\=|\/|\%\=|\%|\&\=|\&\&|\&|\^\=|\^|\|\=|\|\||\||\?|\:))/g),
+        }, {
+          token: "literal",
+          pattern: RegExp(/((?:\\b)(?:null|true|false)(?=(?:\\b)))/g),
+        }, {
+          token: "number",
+          pattern: RegExp(/([-+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?)/g),
+        }, {
+          token: "method",
+          pattern: RegExp(/((?:\.)(?:[\w]+)(?=\())/g),
+        }, {
+          token: "property",
+          pattern: RegExp(/((?:\.)(?:[\w]+)(?=\b))/g),
+        }, {
+          token: "identifier",
+          pattern: RegExp(/((?:\b)(?:[\w]+)(?=\b))/g),
+        }, {
+          token: "punctuation",
+          pattern: RegExp(/((?:[\{\}\[\]\(\)\,]))/g),
+        }, {
+          token: "whitespace",
+          pattern: RegExp(/([\s])/g),
+        }]
+      };
 
-      ready = true;
+      setOptions(defaults);
 
     };
 
     return {
       init: init,
-      lex: lex
+      language: language,
+      lex: lex,
+      setOptions: setOptions
     };
 
   })();
 
+
+
   var Parser = (function() {
 
-    var drawWhitespace = true,
-      ready = false;
+    var options = {
+      draw_whitespace: true,
+      white_space_character: "\u25AA"
+    };
 
-    // Expects a lexeme that contains two properties, type and content.
-    // The type property is used to set the style of the element via
-    // its class and the content will determine the text content.
+    // Expects an input that contains two properties, token and lexeme.
+    // The token property is used to set the element's style via its
+    // class and the lexeme will determine the element's content.
 
     var parse = function(input) {
 
-      var content = input.content,
+      var lexeme = input.lexeme,
         spanElement = document.createElement("span"),
         spanText,
-        type = input.type;
+        token = input.token;
 
-      if (drawWhitespace) {
-        content = content.split(" ").join("\u2024");
+      if (options.draw_whitespace) {
+        lexeme = lexeme.split(" ").join(options.white_space_character);
       }
 
-      spanText = document.createTextNode(content);
-      spanElement.setAttribute("class", type);
+      spanText = document.createTextNode(lexeme);
+      spanElement.classList.add(token);
+      spanElement.setAttribute("data-token", token);
       spanElement.appendChild(spanText);
 
       return spanElement;
 
     };
 
-    var init = function(drawWS) {
+    var init = function(draw_whitespace) {
 
-      if (ready) return;
-
-      drawWhitespace = drawWS;
-
-      ready = true;
+      options.draw_whitespace = draw_whitespace;
 
     };
 
@@ -142,210 +200,121 @@ window.onload = function() {
 
   })();
 
+
+
   var Editor = (function() {
 
-    var input = document.querySelector(".input-field"),
-      output = document.querySelector(".output-field"),
+    var editor = {
+        container: document.querySelector(".js-text-editor"),
+        content: document.querySelector(".editor-content"),
+        header: document.querySelector(".editor-header"),
+        input: {
+          container: document.querySelector(".input-container"),
+          field: document.querySelector(".input-field"),
+          footer: document.querySelector(".input-footer"),
+          header: document.querySelector(".input-header"),
+        },
+        output: {
+          container: document.querySelector(".output-container"),
+          field: document.querySelector(".output-field"),
+          footer: document.querySelector(".output-footer"),
+          gutter: document.querySelector(".output-gutter"),
+          header: document.querySelector(".output-header"),
+        }
+      },
       timeoutID;
-
-    var options = {
-      language: "javascript",
-      rules: [{
-        pattern: RegExp(/((?:["'])(?:(?=(?:\\?))(?:\\?).)*?(?:["']))/g),
-        action: function(input) {
-
-          var lexemes = [],
-            splitInput = input.split(" ");
-
-          splitInput.forEach(function(item, index) {
-
-            lexemes.push({
-              type: "js-string",
-              content: item
-            });
-
-            if (index != splitInput.length) {
-              lexemes.push({
-                type: "whitespace",
-                content: " "
-              });
-            }
-
-          });
-
-          return lexemes;
-
-        }
-      }, {
-        pattern: RegExp(/((?:\b)(?:abstract|await|boolean|break|byte|case|catch|char|class|const|continue|debugger|default|delete|do|double|else|enum|export|extends|final|finally|float|for|function|goto|if|implements|import|in|instanceof|int|interface|let|long|native|new|package|private|protected|public|return|short|static|super|switch|synchronized|this|throw|transient|try|typeof|var|void|volatile|while|with|yield)(?=(?:\b)))/g),
-        action: function(input) {
-
-          var lexeme = {
-            type: "js-keyword",
-            content: input
-          };
-
-          return lexeme;
-
-        }
-      }, {
-        pattern: RegExp(/((?:\b)(?:Object|Function|Boolean|Symbol|Error|EvalError|InternalError|RangeError|ReferenceError|SyntaxError|TypeError|URIError|Number|Math|Date|String|RegExp)(?=(?:\b)))/g),
-        action: function(input) {
-
-          var lexeme = {
-            type: "js-object",
-            content: input
-          };
-
-          return lexeme;
-
-        }
-      }, {
-        pattern: RegExp(/((?:\b)(?:Infinity|NaN|undefined)(?=(?:\b)))/g),
-        action: function(input) {
-
-          var lexeme = {
-            type: "js-object-value",
-            content: input
-          };
-
-          return lexeme;
-
-        }
-      }, {
-        pattern: RegExp(/((?:\b)(?:eval|uneval|isFinite|isNaN|parseFloat|parseInt|decodeURI|decodeURIComponent|encodeURI|encodeURIComponent|escape|unescape)(?=(?:\()))/g),
-        action: function(input) {
-
-          var lexeme = {
-            type: "js-object-function",
-            content: input
-          };
-
-          return lexeme;
-
-        }
-      }, {
-        pattern: RegExp(/((?:\/.*\/g?i?m?))/g),
-        action: function(input) {
-
-          var lexeme = {
-            type: "js-regex",
-            content: input
-          };
-
-          return lexeme;
-
-        }
-      }, {
-        pattern: RegExp(/((?:\+|\-|\*|\/|\%|\>|<|\!|\&|\||\^|\~|\=))/g),
-        action: function(input) {
-
-          var lexeme = {
-            type: "js-operator",
-            content: input
-          };
-
-          return lexeme;
-
-        }
-      }, {
-        pattern: RegExp(/((?:\\b)(?:null|true|false)(?=(?:\\b)))/g),
-        action: function(input) {
-
-          var lexeme = {
-            type: "js-literal",
-            content: input
-          };
-
-          return lexeme;
-
-        }
-      }, {
-        name: "js-number",
-        pattern: RegExp(/([-+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?)/g),
-        action: function(input) {
-
-          var lexeme = {
-            type: "js-number",
-            content: input
-          };
-
-          return lexeme;
-
-        }
-      }, {
-        name: "js-method",
-        pattern: RegExp(/((?:\.)(?:[\w]+)(?=\())/g),
-        action: function(input) {
-
-          var lexeme = {
-            type: "js-method",
-            content: input
-          };
-
-          return lexeme;
-
-        }
-      }, {
-        name: "whitespace",
-        pattern: RegExp(/([\s])/g),
-        action: function(input) {
-
-          var lexeme = {
-            type: "whitespace",
-            content: input
-          };
-
-          return lexeme;
-
-        }
-      }]
-    };
 
     var init = function() {
 
-      Lexer.init(options);
+      Lexer.init();
       Parser.init(true);
 
-      input.addEventListener("keyup", processInput);
-      input.addEventListener("keydown", cancelTimer);
+      editor.input.field.addEventListener("keyup", processInput);
+      editor.input.field.addEventListener("keydown", clearTimer);
+
+      // TODO:
+      //
+      // Load local storage
+      //
+      // Format loaded input
+      //
+      // // writes a json object to storage
+      //
+      // function writeToStorage(jsonObject) {
+      //     window.localStorage.setItem("library", jsonObject);
+      // }
+      //
+      // // populates the library from the string stored in localStorage
+      // function fillLibrary(strLibrary) {
+      //     var jsonLibrary = JSON.parse(strLibrary);
+      //     jsonLibrary.books.forEach(function(book) {
+      //         var bookFromStorage = new BookEntry(book.author, book.title, book.format, book.msrp);
+      //         bookFromStorage.addToArray(library.books);
+      //     });
+      // }
+
 
     };
 
+    // Processes the user's input when a set amount of time
+    // has passed since the last executed keydown event.
+
     function processInput(e) {
-      cancelTimer();
+      clearTimer();
       timeoutID = setTimeout(formatInput, 100);
     }
 
-    function cancelTimer(e) {
+    function clearTimer(e) {
       clearTimeout(timeoutID);
     }
 
+    // Will append the token name to the footer of the output
+    // container when the user mouses over the given item.
+
+    function identifyToken(e) {
+
+      var output = document.getElementById("#token");
+
+      output.textContent = "Token: " + e.currentTarget.getAttribute("data-token");
+
+      console.log(output);
+
+    }
+
     function formatInput(e) {
-      var text = input.value;
 
-      var textSplit = text.split(/\r?\n/g);
+      var input = editor.input.field.value,
+        lineCount = 0,
+        lines = input.split(/\r?\n/g);
 
-      output.innerHTML = "";
+      editor.output.field.innerHTML = "";
+      editor.output.gutter.textContent = "";
 
-      textSplit.forEach(function(item, index) {
+      lines.forEach(function(line) {
 
-        var line = document.createElement("div");
-        line.setAttribute("class", "output-line");
+        var lineElement = document.createElement("div");
 
-        if (item) {
-          var testToken = Lexer.lex(item);
-          for (var i = 0; i < testToken.length; i++) {
-            var node = Parser.parse(testToken[i]);
-            line.appendChild(node);
-            // console.log("type: " + testToken[i].type + " content: " + testToken[i].content);
-          }
-          //line.innerHTML = item;
+        if (line) {
+
+          var tokens = Lexer.lex(line);
+
+          tokens.forEach(function(token) {
+
+            var tokenElement = Parser.parse(token);
+
+            tokenElement.addEventListener("mouseover", identifyToken);
+            lineElement.appendChild(tokenElement);
+            //console.log("token: '" + token.token + "'' lexeme: '" + token.lexeme + "'");
+          });
+
         } else {
-          line.innerHTML = " ";
+          lineElement.textContent = " ";
         }
 
-        output.appendChild(line);
+        lineElement.classList.add("output-line");
+        editor.output.field.appendChild(lineElement);
+        editor.output.gutter.textContent += (++lineCount) + "\n";
+
       });
 
     }
