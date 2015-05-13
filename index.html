@@ -6,7 +6,7 @@
   <title>JS Text Editor</title>
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/app.css">
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <link href="http://fonts.googleapis.com/css?family=Roboto:400,300,700,500" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -18,8 +18,9 @@
       <div class="input-container">
         <div class="input-header">Raw input</div>
         <div class="input-content">
-          <textarea class="input-field" placeholder="Please input text..." spellcheck="false"></textarea>
+          <textarea class="input-field" placeholder="Please input text..." spellcheck="false" wrap="off"></textarea>
         </div>
+        <div class="input-footer"></div>
       </div>
       <div class="output-container">
         <div class="output-header">Formatted output</div>
@@ -27,6 +28,7 @@
           <div class="output-gutter">1</div>
           <div class="output-field"></div>
         </div>
+        <div class="output-footer"></div>
       </div>
     </div>
   </div>

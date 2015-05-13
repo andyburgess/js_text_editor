@@ -10,17 +10,18 @@ html {
 
 body {
   background-color: #c0c5ce;
+  font-family: "Roboto", sans-serif;
 }
 
 .js-text-editor {
   align-items: flex-start;
   display: flex;
   flex-flow: column nowrap;
-  height: 600px;
+  height: 550px;
   margin: 0 auto;
   margin-top: 30px;
   min-width: 400px;
-  width: 90%;
+  width: 75%;
 }
 
 .editor-header {
@@ -49,7 +50,8 @@ body {
   flex-flow: column nowrap;
   height: 100%;
   order: 1;
-  min-width: 50%;
+  width: 50%;
+  min-width: 400px;
 }
 
 .input-content {
@@ -69,7 +71,6 @@ body {
   overflow-y: scroll;
   padding: 12px 12px 12px 52px;
   resize: none;
-  white-space: pre;
   width: 100%;
 }
 
@@ -77,11 +78,11 @@ body {
 .output-header {
   background-color: #232830;
   color: #676c74;
-  font: normal 14px/1 sans-serif;
+  font: normal 14px/1 "Roboto", sans-serif;
   height: 6%;
   order: 1;
   overflow: hidden;
-  padding: 10px;
+  padding: 8px;
   width: 100%;
 }
 
@@ -93,7 +94,8 @@ body {
   flex-flow: column nowrap;
   height: 100%;
   order: 2;
-  min-width: 50%;
+  width: 50%;
+  min-width: 400px;
 }
 
 .output-content {
@@ -140,6 +142,10 @@ body {
   background-color: #272b34;
 }
 
+.js-comment {
+  color: #3e4656;
+}
+
 .js-keyword {
   color: #26a6a6;
 }
@@ -173,6 +179,10 @@ body {
   color: #26a6a6;
 }
 
+.js-property {
+  color: #ff5d38;
+}
+
 .js-regex {
   color: #bcd42a;
 }
@@ -182,7 +192,5 @@ body {
 }
 
 .whitespace {
-  color: #636872;
-  font: normal 10px/1.5 "Input Mono", monospace;
-  padding: 0px 2px;
+  color: #40444d;
 }

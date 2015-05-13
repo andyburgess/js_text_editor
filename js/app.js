@@ -90,6 +90,9 @@ window.onload = function() {
       var defaults = {
         language: "javascript",
         rules: [{
+          name: "js-comment",
+          pattern: RegExp(/((?:\/\/.*$))/g)
+        }, {
           name: "js-string",
           pattern: RegExp(/((?:["'])(?:(?=(?:\\?))(?:\\?).)*?(?:["']))/g)
         }, {
@@ -120,6 +123,9 @@ window.onload = function() {
           name: "js-method",
           pattern: RegExp(/((?:\.)(?:[\w]+)(?=\())/g)
         }, {
+          name: "js-property",
+          pattern: RegExp(/((?:\.)(?:[\w]+)(?=\b))/g)
+        }, {
           name: "whitespace",
           pattern: RegExp(/([\s])/g)
         }]
@@ -131,17 +137,20 @@ window.onload = function() {
 
     return {
       init: init,
+      language: language,
       lex: lex,
       setOptions: setOptions
     };
 
   })();
 
+
+
   var Parser = (function() {
 
     var options = {
       draw_whitespace: true,
-      white_space_character: "\u2022"
+      white_space_character: "\u25AA"
     };
 
     // Expects a lexeme that contains two properties, type and content.
@@ -180,56 +189,95 @@ window.onload = function() {
 
   })();
 
+
+
   var Editor = (function() {
 
-    var input = document.querySelector(".input-field"),
-      output = document.querySelector(".output-field"),
+    var editor = {
+        container: document.querySelector(".js-text-editor"),
+        content: document.querySelector(".editor-content"),
+        header: document.querySelector(".editor-header"),
+        input: {
+          container: document.querySelector(".input-container"),
+          field: document.querySelector(".input-field"),
+          footer: document.querySelector(".input-footer"),
+          header: document.querySelector(".input-header"),
+        },
+        output: {
+          container: document.querySelector(".output-container"),
+          field: document.querySelector(".output-field"),
+          footer: document.querySelector(".output-footer"),
+          gutter: document.querySelector(".output-gutter"),
+          header: document.querySelector(".output-header"),
+        }
+      },
       timeoutID;
 
     var init = function() {
 
-      Lexer.init(options);
-      Parser.init(true);
+      Lexer.init();
+      Parser.init(false);
 
-      input.addEventListener("keyup", processInput);
-      input.addEventListener("keydown", cancelTimer);
+      editor.input.field.addEventListener("keyup", processInput);
+      editor.input.field.addEventListener("keydown", clearTimer);
+
+      // TODO:
+      //
+      // Load local storage
+      //
+      // Format loaded input
 
     };
 
     function processInput(e) {
-      cancelTimer();
+      clearTimer();
       timeoutID = setTimeout(formatInput, 100);
     }
 
-    function cancelTimer(e) {
+    function clearTimer(e) {
       clearTimeout(timeoutID);
     }
 
+    // TODO: Append element type to footer
+    //
+    // function logElementType(e) {
+    //   console.log(e.currentTarget.getAttribute("class"));
+    // }
+
     function formatInput(e) {
-      var text = input.value;
 
-      var textSplit = text.split(/\r?\n/g);
+      var input = editor.input.field.value,
+        lineCount = 0,
+        lines = input.split(/\r?\n/g);
 
-      output.innerHTML = "";
+      editor.output.field.innerHTML = "";
+      editor.output.gutter.textContent = "";
 
-      textSplit.forEach(function(item, index) {
+      lines.forEach(function(line) {
 
-        var line = document.createElement("div");
-        line.setAttribute("class", "output-line");
+        var lineElement = document.createElement("div");
 
-        if (item) {
-          var testToken = Lexer.lex(item);
-          for (var i = 0; i < testToken.length; i++) {
-            var node = Parser.parse(testToken[i]);
-            line.appendChild(node);
-            // console.log("type: " + testToken[i].type + " content: " + testToken[i].content);
-          }
-          //line.innerHTML = item;
+        if (line) {
+
+          var tokens = Lexer.lex(line);
+
+          tokens.forEach(function(token) {
+
+            var tokenElement = Parser.parse(token);
+
+            tokenElement.addEventListener("mouseover", logElementType);
+            lineElement.appendChild(tokenElement);
+            //console.log("type: '" + token.type + "'' content: '" + token.content + "'");
+          });
+
         } else {
-          line.innerHTML = " ";
+          lineElement.textContent = " ";
         }
 
-        output.appendChild(line);
+        lineElement.setAttribute("class", "output-line");
+        editor.output.field.appendChild(lineElement);
+        editor.output.gutter.textContent += (++lineCount) + "\n";
+
       });
 
     }

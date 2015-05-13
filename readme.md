@@ -16,6 +16,6 @@ TBD
 
 TBD
 
-### Outside Code
+### Influences
 
-[jQuery 1.11.2](http://jquery.com/)
+[Write-up on Regex-based Lexical Analysis](http://eli.thegreenplace.net/2013/06/25/regex-based-lexical-analysis-in-python-and-javascript)
