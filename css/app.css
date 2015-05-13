@@ -136,26 +136,53 @@ body {
   width: 40px;
 }
 
-.output-line {}
-
 .active {
   background-color: #272b34;
 }
 
-.keyword {
+.js-keyword {
   color: #26a6a6;
 }
 
-.method {
+.js-literal {
   color: #ff5d38;
 }
 
-.function-name {
-  color: #60a12a;
+.js-method {
+  color: #ff5d38;
 }
 
-.space {
+.js-number {
+  color: #bcd42a;
+}
+
+.js-object {
+  color: #ff5d38;
+  font-style: italic;
+}
+
+.js-object-function {
+  color: #ff5d38;
+}
+
+.js-object-value {
+  color: #ff5d38;
+}
+
+.js-operator {
+  color: #26a6a6;
+}
+
+.js-regex {
+  color: #bcd42a;
+}
+
+.js-string {
+  color: #bcd42a;
+}
+
+.whitespace {
   color: #636872;
+  font: normal 10px/1.5 "Input Mono", monospace;
+  padding: 0px 2px;
 }
-
-.string {}
