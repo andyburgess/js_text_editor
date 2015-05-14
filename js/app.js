@@ -156,6 +156,8 @@ window.onload = function() {
 
 
 
+
+
   var Parser = (function() {
 
     var options = {
@@ -202,6 +204,8 @@ window.onload = function() {
 
 
 
+
+
   var Editor = (function() {
 
     var editor = {
@@ -234,7 +238,7 @@ window.onload = function() {
     // editor's input to keep the editor from processing
     // the input for every single bit of user input.
 
-    var clearTimer = function(e) {
+    var clearInputTimer = function(e) {
 
       clearTimeout(timeoutID);
 
@@ -269,6 +273,8 @@ window.onload = function() {
         lines = input.split(/\r?\n/g),
         t0,
         t1;
+
+      writeToStorage("js_editor_input", input);
 
       t0 = performance.now();
 
@@ -311,25 +317,27 @@ window.onload = function() {
 
     };
 
-    var loadFromStorage = function(strInput) {
+    var setActiveLineIdentifier = function(e) {
 
-      editor.input.value = strInput;
+      e.currentTarget.classList.add("active");
+
+    };
+
+    var setInput = function(value) {
+
+      editor.input.field.value = value;
+      editor.input.field.focus();
+      formatInput();
 
     };
 
     // Processes the user's input when a set amount of time
     // has passed since the last executed keydown event.
 
-    var processInput = function(e) {
+    var setInputTimer = function(e) {
 
-      clearTimer();
+      clearInputTimer();
       timeoutID = setTimeout(formatInput, 100);
-
-    };
-
-    var setActiveLineIdentifier = function(e) {
-
-      e.currentTarget.classList.add("active");
 
     };
 
@@ -345,31 +353,41 @@ window.onload = function() {
 
     };
 
-    var writeToStorage = function(jsonObject) {
-
-      window.localStorage.setItem("js_edit_input", jsonObject);
-
-    };
-
     var init = function() {
+
+      var storedInput = loadFromStorage("js_editor_input");
 
       Lexer.init();
       Parser.init(true);
 
-      editor.input.field.addEventListener("keydown", clearTimer);
-      editor.input.field.addEventListener("keyup", processInput);
-      editor.input.field.addEventListener("paste", processInput);
+      editor.input.field.addEventListener("keydown", clearInputTimer);
+      editor.input.field.addEventListener("keyup", setInputTimer);
+      editor.input.field.addEventListener("paste", setInputTimer);
+
+      setInput(storedInput);
 
     };
 
     return {
-      init: init
+      init: init,
     };
 
   })();
 
+  var loadFromStorage = function(item) {
+
+    var storedItem = window.localStorage.getItem(item);
+
+    if (storedItem) return storedItem;
+
+  };
+
+  var writeToStorage = function(key, value) {
+
+    window.localStorage.setItem(key, value);
+
+  };
 
   Editor.init();
-
 
 };
