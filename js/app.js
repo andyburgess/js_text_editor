@@ -224,72 +224,45 @@ window.onload = function() {
       },
       timeoutID;
 
-    var init = function() {
+    var clearActiveLineIdentifier = function(e) {
 
-      Lexer.init();
-      Parser.init(true);
-
-      editor.input.field.addEventListener("keyup", processInput);
-      editor.input.field.addEventListener("keydown", clearTimer);
-
-      // TODO:
-      //
-      // Load local storage
-      //
-      // Format loaded input
-      //
-      // // writes a json object to storage
-      //
-      // function writeToStorage(jsonObject) {
-      //     window.localStorage.setItem("library", jsonObject);
-      // }
-      //
-      // // populates the library from the string stored in localStorage
-      // function fillLibrary(strLibrary) {
-      //     var jsonLibrary = JSON.parse(strLibrary);
-      //     jsonLibrary.books.forEach(function(book) {
-      //         var bookFromStorage = new BookEntry(book.author, book.title, book.format, book.msrp);
-      //         bookFromStorage.addToArray(library.books);
-      //     });
-      // }
-
+      e.currentTarget.classList.remove("active");
 
     };
 
-    // Processes the user's input when a set amount of time
-    // has passed since the last executed keydown event.
+    // Clears the timoutID when a user makes a change to the
+    // editor's input to keep the editor from processing
+    // the input for every single bit of user input.
 
-    function processInput(e) {
-      clearTimer();
-      timeoutID = setTimeout(formatInput, 100);
-    }
+    var clearTimer = function(e) {
 
-    function clearTimer(e) {
       clearTimeout(timeoutID);
-    }
 
-    // Will append the token name to the footer of the output
-    // container when the user mouses over the given item.
+    };
 
-    function identifyToken(e) {
+    var clearTokenIdentifier = function(e) {
 
-      var input = e.currentTarget.getAttribute("data-token"),
-      output = editor.output.footer.querySelector("#token");
+      var output = editor.output.footer.querySelector("#token");
 
-      output.textContent = input.charAt(0).toUpperCase() + input.substring(1) + " token selected.";
+      output.textContent = "No token selected.";
 
-    }
+    };
 
-    function displayPerformance(t0, t1) {
+    // This function will take two parameters, t0 and t1, which
+    // represent the start time and end time of the editor's
+    // formatInput function, and displays the performance
+    // data to the user in the editor's output footer.
+
+    var displayPerformance = function(t0, t1) {
 
       var output = editor.output.footer.querySelector("#exec-time"),
-      performance = Math.ceil(t1 - t0);
+        performance = Math.ceil(t1 - t0);
 
       output.textContent = "Executed in " + performance + " milliseconds.";
 
-    }
+    };
 
-    function formatInput(e) {
+    var formatInput = function(e) {
 
       var input = editor.input.field.value,
         lineCount = 0,
@@ -314,7 +287,8 @@ window.onload = function() {
 
             var tokenElement = Parser.parse(token);
 
-            tokenElement.addEventListener("mouseover", identifyToken);
+            tokenElement.addEventListener("mouseover", setTokenIdentifier);
+            tokenElement.addEventListener("mouseleave", clearTokenIdentifier);
             lineElement.appendChild(tokenElement);
             //console.log("token: '" + token.token + "'' lexeme: '" + token.lexeme + "'");
           });
@@ -324,6 +298,9 @@ window.onload = function() {
         }
 
         lineElement.classList.add("output-line");
+        lineElement.addEventListener("mouseover", setActiveLineIdentifier);
+        lineElement.addEventListener("mouseleave", clearActiveLineIdentifier);
+
         editor.output.field.appendChild(lineElement);
         editor.output.gutter.textContent += (++lineCount) + "\n";
 
@@ -332,7 +309,58 @@ window.onload = function() {
       t1 = performance.now();
       displayPerformance(t0, t1);
 
-    }
+    };
+
+    var loadFromStorage = function(strInput) {
+
+      editor.input.value = strInput;
+
+    };
+
+    // Processes the user's input when a set amount of time
+    // has passed since the last executed keydown event.
+
+    var processInput = function(e) {
+
+      clearTimer();
+      timeoutID = setTimeout(formatInput, 100);
+
+    };
+
+    var setActiveLineIdentifier = function(e) {
+
+      e.currentTarget.classList.add("active");
+
+    };
+
+    // Will append the token name to the footer of the output
+    // container when the user mouses over the given item.
+
+    var setTokenIdentifier = function(e) {
+
+      var input = e.currentTarget.getAttribute("data-token"),
+        output = editor.output.footer.querySelector("#token");
+
+      output.textContent = input.charAt(0).toUpperCase() + input.substring(1) + " token selected.";
+
+    };
+
+    var writeToStorage = function(jsonObject) {
+
+      window.localStorage.setItem("js_edit_input", jsonObject);
+
+    };
+
+    var init = function() {
+
+      Lexer.init();
+      Parser.init(true);
+
+      editor.input.field.addEventListener("keydown", clearTimer);
+      editor.input.field.addEventListener("keyup", processInput);
+      editor.input.field.addEventListener("paste", processInput);
+
+    };
 
     return {
       init: init
