@@ -6,18 +6,9 @@ window.onload = function() {
       rules,
       regex;
 
-    var setOptions = function(options) {
+    var getLanguage = function() {
 
-      language = options.language;
-      rules = options.rules;
-
-      // The regex variable is a RegExp object that combines all
-      // of the individual patterns from the rules object as
-      // capturing groups within a single RegExp pattern.
-
-      regex = RegExp(rules.map(function(rule) {
-        return rule.pattern.source;
-      }).join("|"), "g");
+      return language;
 
     };
 
@@ -28,7 +19,7 @@ window.onload = function() {
         previousIndex = 0,
         unmatched = input;
 
-      var determineLexeme = function(match) {
+      function determineLexeme(match) {
 
         // For each capturing group in the RegExp object, determine
         // which group was captured by the match, and return the
@@ -49,16 +40,16 @@ window.onload = function() {
 
         }
 
-      };
+      }
 
-      var pushUnknown = function(l) {
+      function pushUnknown(l) {
 
         lexemes.push({
           token: "unkown",
           lexeme: l
         });
 
-      };
+      }
 
       while ((match = regex.exec(input))) {
 
@@ -88,11 +79,25 @@ window.onload = function() {
 
     };
 
+    var setOptions = function(options) {
+
+      language = options.language;
+      rules = options.rules;
+
+      // The regex variable is a RegExp object that combines all
+      // of the individual patterns from the rules object as
+      // capturing groups within a single RegExp pattern.
+
+      regex = RegExp(rules.map(function(rule) {
+        return rule.pattern.source;
+      }).join("|"), "g");
+
+    };
 
     var init = function() {
 
       var defaults = {
-        language: "javascript",
+        language: "JavaScript (default)",
         rules: [{
           token: "comment",
           pattern: RegExp(/((?:\/\/.*$))/g),
@@ -147,7 +152,7 @@ window.onload = function() {
 
     return {
       init: init,
-      language: language,
+      getLanguage: getLanguage,
       lex: lex,
       setOptions: setOptions
     };
@@ -266,6 +271,14 @@ window.onload = function() {
 
     };
 
+    var displayLexerLanguage = function(language) {
+
+      var output = editor.input.footer.querySelector("#lex-lang");
+
+      output.textContent = "Lexer is setup for " + language + ".";
+
+    };
+
     var formatInput = function(e) {
 
       var input = editor.input.field.value,
@@ -313,6 +326,7 @@ window.onload = function() {
       });
 
       t1 = performance.now();
+      displayLexerLanguage(Lexer.getLanguage());
       displayPerformance(t0, t1);
 
     };
@@ -378,7 +392,11 @@ window.onload = function() {
 
     var storedItem = window.localStorage.getItem(item);
 
-    if (storedItem) return storedItem;
+    if (storedItem) {
+      return storedItem;
+    } else {
+      return "";
+    }
 
   };
 
