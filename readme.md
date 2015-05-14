@@ -2,11 +2,11 @@
 
 ### Live URL
 
-TBD
+[editor.silvusvalentine.me](http://editor.silvusvalentine.me)
 
 ### Description
 
-TBD
+A text editor and syntax highlighter written in JavaScript.
 
 ### Demo
 
@@ -14,8 +14,8 @@ TBD
 
 ### Additional Details
 
-TBD
+To use this tool, click inside the text area on the left. Begin typing and you will see your input being automatically formatted to the right.
 
-### Influences
+### Influential Resources
 
 [Write-up on Regex-based Lexical Analysis](http://eli.thegreenplace.net/2013/06/25/regex-based-lexical-analysis-in-python-and-javascript)

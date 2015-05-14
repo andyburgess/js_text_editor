@@ -8,12 +8,6 @@ html {
   box-sizing: inherit;
 }
 
-a {
-  color: #c3cdc4;
-  font-style: italic;
-  text-decoration: none;
-}
-
 body {
   background-color: rgb(93, 99, 108);
   background: url('../img/bg.jpg') no-repeat center center fixed;
@@ -45,10 +39,20 @@ body {
 .editor-header {
   align-self: flex-start;
   flex: 1;
-  height: 10%;
+  flex-flow: row nowrap;
+  height: 84px;
   order: 1;
   padding: 8px;
   width: 100%;
+}
+
+.editor-header a {
+  color: #393b40;
+  text-decoration: none;
+}
+
+.editor-header a:hover {
+  color: #487673;
 }
 
 .editor-content {
@@ -68,10 +72,16 @@ body {
   align-self: flex-end;
   color: #c3cdc4;
   flex: 1;
-  height: 10%;
+  height: 50px;
   order: 3;
   padding: 20px 8px 0;
   width: 100%;
+}
+
+.editor-footer a {
+  color: #c3cdc4;
+  font-style: italic;
+  text-decoration: none;
 }
 
 .editor-info {
