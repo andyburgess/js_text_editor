@@ -1,5 +1,7 @@
 html {
   box-sizing: border-box;
+  height: 100%;
+  margin: 0;
 }
 
 *,
@@ -9,14 +11,13 @@ html {
 }
 
 body {
-  background-color: rgb(93, 99, 108);
+  background-color: #8E918D;
   background: url('../img/bg.jpg') no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
   background-size: cover;
   color: #393b40;
   font-family: "Roboto", sans-serif;
+  height: 100%;
+  margin: 0;
 }
 
 ::selection {
@@ -24,26 +25,30 @@ body {
   color: #c0c5ce;
 }
 
-.js-text-editor {
-  align-items: flex-start;
-  display: flex;
-  flex-flow: column wrap;
+.container {
+  height: 100%;
   margin: 0 auto;
-  margin-bottom: 50px;
-  margin-top: 30px;
-  min-width: 400px;
-  padding: 10px 20px;
+  padding: 50px 0;
+}
+
+.js-text-editor {
+  align-items: stretch;
+  display: flex;
+  flex-flow: column nowrap;
+  height: 100%;
+  margin: auto;
+  max-height: 850px;
+  min-height: 600px;
+  min-width: 600px;
+  padding: 5px;
   width: 75%;
 }
 
 .editor-header {
-  align-self: flex-start;
-  flex: 1;
-  flex-flow: row nowrap;
+  flex: 0 0 84px;
   height: 84px;
   order: 1;
   padding: 8px;
-  width: 100%;
 }
 
 .editor-header a {
@@ -52,30 +57,31 @@ body {
 }
 
 .editor-header a:hover {
-  color: #487673;
+  color: #73586D;
 }
 
 .editor-content {
+  align-content: stretch;
   align-items: stretch;
   box-shadow: 6px 6px 1px 0 rgba(34, 34, 40, 0.3);
   display: flex;
   flex: 1;
   flex-flow: row wrap;
-  height: 80%;
+  justify-content: flex-start;
   order: 2;
-  overflow: auto;
-  min-width: 400px;
-  width: 100%;
+}
+
+@media (max-width: 960px) {
+  .editor-content {
+    flex-flow: column nowrap;
+  }
 }
 
 .editor-footer {
-  align-self: flex-end;
   color: #c3cdc4;
-  flex: 1;
-  height: 50px;
+  flex: 0 0 50px;
   order: 3;
   padding: 20px 8px 0;
-  width: 100%;
 }
 
 .editor-footer a {
@@ -91,84 +97,74 @@ body {
 }
 
 .input-container {
-  align-items: flex-start;
+  align-items: stretch;
   background-color: #2b303b;
   display: flex;
   flex: 1;
   flex-flow: column nowrap;
-  height: 560px;
   order: 1;
-  width: 50%;
-  min-width: 400px;
 }
 
 .input-content {
+  align-items: stretch;
   background-color: #2e313a;
-  height: 89%;
+  display: flex;
+  flex: 1;
+  flex-flow: column nowrap;
   order: 2;
-  overflow: hidden;
-  width: 100%;
 }
 
 .input-field {
   background-color: inherit;
   border: none;
   color: #acb1b1;
+  flex: 1;
   font: normal 15px/1.5 "Input Mono", monospace;
-  height: 100%;
   outline: none;
   overflow-y: scroll;
   padding: 12px 12px 12px 52px;
   resize: none;
-  width: 100%;
+  white-space: nowrap;
 }
 
 .input-footer,
 .output-footer {
   background-color: #676c73;
   color: #2a2930;
+  flex: 0 0 28px;
   font: normal 14px/1 "Roboto", sans-serif;
-  height: 5%;
   order: 3;
-  overflow: hidden;
   padding: 8px 16px;
-  width: 100%;
 }
 
 .input-header,
 .output-header {
   background-color: #2a2930;
   color: #acb1b1;
+  flex: 0 0 34px;
   font: normal 14px/1 "Roboto", sans-serif;
-  height: 6%;
   order: 1;
-  overflow: hidden;
   padding: 10px 20px;
-  width: 100%;
 }
 
 .output-container {
-  align-items: flex-start;
+  align-items: stretch;
   background-color: #2e313a;
   display: flex;
   flex: 1;
   flex-flow: column nowrap;
-  height: 560px;
   order: 2;
   overflow: hidden;
-  width: 50%;
-  min-width: 400px;
 }
 
 .output-content {
   align-items: stretch;
   background-color: inherit;
   display: flex;
+  flex: 1;
   flex-flow: row nowrap;
-  height: 89%;
   order: 2;
   overflow-y: scroll;
-  width: 100%;
 }
 
 .output-field {
@@ -180,19 +176,16 @@ body {
 .output-field,
 .output-gutter {
   background-color: inherit;
-  display: inline-block;
   font: normal 15px/1.5 "Input Mono", monospace;
   padding: 12px 4px 0;
-  vertical-align: top;
   white-space: pre;
 }
 
 .output-gutter {
-  color: #acb1b1;
-  flex: none;
+  color: #7B7F84;
+  flex: 0 0 40px;
   order: 1;
   text-align: right;
-  width: 40px;
 }
 
 .output-info {
