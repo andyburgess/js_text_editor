@@ -98,7 +98,7 @@ body {
 
 .input-container {
   align-items: stretch;
-  background-color: #2b303b;
+  background-color: #2e313a;
   display: flex;
   flex: 1;
   flex-flow: column nowrap;
@@ -115,7 +115,7 @@ body {
 }
 
 .input-field {
-  background-color: inherit;
+  background-color: #2e313a;
   border: none;
   color: #acb1b1;
   flex: 1;
@@ -159,7 +159,7 @@ body {
 
 .output-content {
   align-items: stretch;
-  background-color: inherit;
+  background-color: #2e313a;
   display: flex;
   flex: 1;
   flex-flow: row nowrap;
@@ -175,7 +175,7 @@ body {
 
 .output-field,
 .output-gutter {
-  background-color: inherit;
+  background-color: #2e313a;
   font: normal 15px/1.5 "Input Mono", monospace;
   padding: 12px 4px 0;
   white-space: pre;
