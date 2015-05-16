@@ -28,7 +28,7 @@ body {
 .container {
   height: 100%;
   margin: 0 auto;
-  padding: 50px 0;
+  padding: 1% 0 2%;
 }
 
 .js-text-editor {
@@ -38,7 +38,7 @@ body {
   height: 100%;
   margin: auto;
   max-height: 850px;
-  min-height: 600px;
+  min-height: 550px;
   min-width: 600px;
   padding: 5px;
   width: 75%;
@@ -71,7 +71,7 @@ body {
   order: 2;
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1080px) {
   .editor-content {
     flex-flow: column nowrap;
   }
