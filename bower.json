@@ -1,0 +1,16 @@
+{
+  "name": "js_text_editor",
+  "version": "0.0.0",
+  "homepage": "https://github.com/silvusvalentine/js_text_editor",
+  "authors": [
+    "William A. Burgess <silvusvalentine@hotmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
