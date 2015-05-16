@@ -1,5 +1,7 @@
 window.onload = function() {
 
+
+
   var Lexer = (function() {
 
     var language,
@@ -161,8 +163,6 @@ window.onload = function() {
 
 
 
-
-
   var Parser = (function() {
 
     var options = {
@@ -182,7 +182,7 @@ window.onload = function() {
         token = input.token;
 
       if (options.draw_whitespace) {
-        lexeme = lexeme.split(" ").join(options.white_space_character);
+        lexeme = lexeme.replace(/\s/g, options.white_space_character);
       }
 
       spanText = document.createTextNode(lexeme);
@@ -206,8 +206,6 @@ window.onload = function() {
     };
 
   })();
-
-
 
 
 
@@ -374,6 +372,7 @@ window.onload = function() {
       Lexer.init();
       Parser.init(true);
 
+      editor.input.field.addEventListener("keydown", captureInput);
       editor.input.field.addEventListener("keydown", clearInputTimer);
       editor.input.field.addEventListener("keyup", setInputTimer);
       editor.input.field.addEventListener("paste", setInputTimer);
