@@ -1,5 +1,6 @@
-window.onload = function() {
+define(function(require) {
 
+<<<<<<< HEAD
 
 
   var Lexer = (function() {
@@ -403,7 +404,10 @@ window.onload = function() {
     window.localStorage.setItem(key, value);
 
   };
+=======
+  var Editor = require("Editor");
+>>>>>>> 403a790c82e0c72cf3f7ae83ad608a410c714b58
 
   Editor.init();
 
-};
+});
