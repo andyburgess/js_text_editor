@@ -373,6 +373,7 @@ define(function(require) {
       Lexer.init();
       Parser.init(true);
 
+      editor.input.field.addEventListener("keydown", captureInput);
       editor.input.field.addEventListener("keydown", clearInputTimer);
       editor.input.field.addEventListener("keyup", setInputTimer);
       editor.input.field.addEventListener("paste", setInputTimer);
