@@ -1,6 +1,5 @@
-define(function(require) {
+window.onload = function() {
 
-<<<<<<< HEAD
 
 
   var Lexer = (function() {
@@ -373,7 +372,6 @@ define(function(require) {
       Lexer.init();
       Parser.init(true);
 
-      editor.input.field.addEventListener("keydown", captureInput);
       editor.input.field.addEventListener("keydown", clearInputTimer);
       editor.input.field.addEventListener("keyup", setInputTimer);
       editor.input.field.addEventListener("paste", setInputTimer);
@@ -405,10 +403,7 @@ define(function(require) {
     window.localStorage.setItem(key, value);
 
   };
-=======
-  var Editor = require("Editor");
->>>>>>> 403a790c82e0c72cf3f7ae83ad608a410c714b58
 
   Editor.init();
 
-});
+};
