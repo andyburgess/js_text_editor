@@ -247,6 +247,8 @@ window.onload = function() {
 
     };
 
+
+
     var clearTokenIdentifier = function(e) {
 
       var output = editor.output.footer.querySelector("#token");
@@ -269,6 +271,10 @@ window.onload = function() {
 
     };
 
+    // This function will display the language being used by
+    // the lexer, as defined in the Lexer's rules array,
+    // in the footer at the bottom of the input area.
+
     var displayLexerLanguage = function(language) {
 
       var output = editor.input.footer.querySelector("#lex-lang");
@@ -276,6 +282,11 @@ window.onload = function() {
       output.textContent = "Lexer is setup for " + language + ".";
 
     };
+
+    // This function takes the text of the input area and sends
+    // it to the Lexer, which analyzes the text and returns
+    // an array of tokens and lexemes, which are sent to
+    // the Parser and are added as nodes to the DOM.
 
     var formatInput = function(e) {
 
@@ -307,7 +318,7 @@ window.onload = function() {
             tokenElement.addEventListener("mouseover", setTokenIdentifier);
             tokenElement.addEventListener("mouseleave", clearTokenIdentifier);
             lineElement.appendChild(tokenElement);
-            //console.log("token: '" + token.token + "'' lexeme: '" + token.lexeme + "'");
+
           });
 
         } else {
@@ -334,6 +345,8 @@ window.onload = function() {
       e.currentTarget.classList.add("active");
 
     };
+
+    // TODO: comment
 
     var setInput = function(value) {
 
@@ -364,6 +377,11 @@ window.onload = function() {
       output.textContent = input.charAt(0).toUpperCase() + input.substring(1) + " token selected.";
 
     };
+
+    // Initializes the Editor module, loads any stored text from
+    // localStorage, initializes the Lexer and Parser modules,
+    // adds event listeners to the input field, and finally
+    // sets the input field's value from the loaded text.
 
     var init = function() {
 
