@@ -20,6 +20,11 @@ body {
   margin: 0;
 }
 
+::-moz-selection {
+  background: #bac4cd;
+  color: #c0c5ce;
+}
+
 ::selection {
   background: #bac4cd;
   color: #c0c5ce;
@@ -32,8 +37,14 @@ body {
 }
 
 .js-text-editor {
+  -webkit-align-items: stretch;
+  -ms-flex-align: stretch;
   align-items: stretch;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-flex-flow: column nowrap;
+  -ms-flex-flow: column nowrap;
   flex-flow: column nowrap;
   height: 100%;
   margin: auto;
@@ -45,8 +56,12 @@ body {
 }
 
 .editor-header {
+  -webkit-flex: 0 0 84px;
+  -ms-flex: 0 0 84px;
   flex: 0 0 84px;
   height: 84px;
+  -webkit-order: 1;
+  -ms-flex-order: 1;
   order: 1;
   padding: 8px;
 }
@@ -61,25 +76,45 @@ body {
 }
 
 .editor-content {
+  -webkit-align-content: stretch;
+  -ms-flex-line-pack: stretch;
   align-content: stretch;
+  -webkit-align-items: stretch;
+  -ms-flex-align: stretch;
   align-items: stretch;
   box-shadow: 6px 6px 1px 0 rgba(34, 34, 40, 0.3);
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-flex: 1;
+  -ms-flex: 1;
   flex: 1;
+  -webkit-flex-flow: row wrap;
+  -ms-flex-flow: row wrap;
   flex-flow: row wrap;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
   justify-content: flex-start;
+  -webkit-order: 2;
+  -ms-flex-order: 2;
   order: 2;
 }
 
 @media (max-width: 1080px) {
   .editor-content {
-    flex-flow: column nowrap;
+      -webkit-flex-flow: column nowrap;
+      -ms-flex-flow: column nowrap;
+      flex-flow: column nowrap;
   }
 }
 
 .editor-footer {
   color: #c3cdc4;
+  -webkit-flex: 0 0 50px;
+  -ms-flex: 0 0 50px;
   flex: 0 0 50px;
+  -webkit-order: 3;
+  -ms-flex-order: 3;
   order: 3;
   padding: 20px 8px 0;
 }
@@ -97,20 +132,40 @@ body {
 }
 
 .input-container {
+  -webkit-align-items: stretch;
+  -ms-flex-align: stretch;
   align-items: stretch;
   background-color: #2e313a;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-flex: 1;
+  -ms-flex: 1;
   flex: 1;
+  -webkit-flex-flow: column nowrap;
+  -ms-flex-flow: column nowrap;
   flex-flow: column nowrap;
+  -webkit-order: 1;
+  -ms-flex-order: 1;
   order: 1;
 }
 
 .input-content {
+  -webkit-align-items: stretch;
+  -ms-flex-align: stretch;
   align-items: stretch;
   background-color: #2e313a;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-flex: 1;
+  -ms-flex: 1;
   flex: 1;
+  -webkit-flex-flow: column nowrap;
+  -ms-flex-flow: column nowrap;
   flex-flow: column nowrap;
+  -webkit-order: 2;
+  -ms-flex-order: 2;
   order: 2;
 }
 
@@ -118,6 +173,8 @@ body {
   background-color: #2e313a;
   border: none;
   color: #acb1b1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
   flex: 1;
   font: normal 15px/1.5 "Input Mono", monospace;
   outline: none;
@@ -131,8 +188,12 @@ body {
 .output-footer {
   background-color: #676c73;
   color: #2a2930;
+  -webkit-flex: 0 0 28px;
+  -ms-flex: 0 0 28px;
   flex: 0 0 28px;
   font: normal 14px/1 "Roboto", sans-serif;
+  -webkit-order: 3;
+  -ms-flex-order: 3;
   order: 3;
   padding: 8px 16px;
 }
@@ -141,35 +202,63 @@ body {
 .output-header {
   background-color: #2a2930;
   color: #acb1b1;
+  -webkit-flex: 0 0 34px;
+  -ms-flex: 0 0 34px;
   flex: 0 0 34px;
   font: normal 14px/1 "Roboto", sans-serif;
+  -webkit-order: 1;
+  -ms-flex-order: 1;
   order: 1;
   padding: 10px 20px;
 }
 
 .output-container {
+  -webkit-align-items: stretch;
+  -ms-flex-align: stretch;
   align-items: stretch;
   background-color: #2e313a;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-flex: 1;
+  -ms-flex: 1;
   flex: 1;
+  -webkit-flex-flow: column nowrap;
+  -ms-flex-flow: column nowrap;
   flex-flow: column nowrap;
+  -webkit-order: 2;
+  -ms-flex-order: 2;
   order: 2;
   overflow: hidden;
 }
 
 .output-content {
+  -webkit-align-items: stretch;
+  -ms-flex-align: stretch;
   align-items: stretch;
   background-color: #2e313a;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-flex: 1;
+  -ms-flex: 1;
   flex: 1;
+  -webkit-flex-flow: row nowrap;
+  -ms-flex-flow: row nowrap;
   flex-flow: row nowrap;
+  -webkit-order: 2;
+  -ms-flex-order: 2;
   order: 2;
   overflow-y: scroll;
 }
 
 .output-field {
   color: #acb1b1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
   flex: 1;
+  -webkit-order: 2;
+  -ms-flex-order: 2;
   order: 2;
 }
 
@@ -183,7 +272,11 @@ body {
 
 .output-gutter {
   color: #7B7F84;
+  -webkit-flex: 0 0 40px;
+  -ms-flex: 0 0 40px;
   flex: 0 0 40px;
+  -webkit-order: 1;
+  -ms-flex-order: 1;
   order: 1;
   text-align: right;
 }
