@@ -267,7 +267,7 @@ window.onload = function() {
       var output = editor.output.footer.querySelector("#exec-time"),
         performance = Math.ceil(t1 - t0);
 
-      output.textContent = "Executed in " + performance + " milliseconds.";
+      output.textContent = "Executed in " + performance + " ms.";
 
     };
 
