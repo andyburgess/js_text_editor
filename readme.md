@@ -10,7 +10,7 @@ A text editor and syntax highlighter written in JavaScript. The lexer utilizes r
 
 ### Demo
 
-TBD
+![JS Text Editor Demo](http://giant.gfycat.com/InnocentFrightenedKestrel.gif)
 
 ### Additional Details
 
