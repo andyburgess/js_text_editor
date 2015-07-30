@@ -157,7 +157,7 @@ body {
   overflow-y: scroll;
   padding: 12px 12px 12px 42px;
   resize: none;
-  white-space: pre;
+  white-space: nowrap;
 }
 
 .input-footer,

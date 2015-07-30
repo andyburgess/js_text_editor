@@ -120,7 +120,7 @@ window.onload = function() {
           pattern: RegExp(/((?:\.)(?:[\w]+)(?=\b))/g),
         }, {
           token: "punctuation",
-          pattern: RegExp(/((?:[\{\}\[\]\(\)\,]))/g),
+          pattern: RegExp(/((?:[\{\}\[\]\(\)\,\;]))/g),
         }, {
           token: "literal",
           pattern: RegExp(/((?:\\b)(?:null|true|false)(?=(?:\\b)))/g),
